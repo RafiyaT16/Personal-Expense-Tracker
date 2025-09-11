@@ -1,0 +1,202 @@
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows
+
+PS C:\Users\Rafiya> mysql -u root -p
+Enter password: *******
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 12
+Server version: 8.0.39 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2024, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| pro                |
+| sys                |
+| test               |
+| trig               |
++--------------------+
+7 rows in set (0.29 sec)
+
+mysql> create database sqlpro;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> use sqlpro;
+Database changed
+mysql> create table users(user_id int auto_increment primary key,name varchar(100) not null,email varchar(100) unique not null,password varchar(100) not null);
+Query OK, 0 rows affected (0.09 sec)
+
+mysql> desc users;
++----------+--------------+------+-----+---------+----------------+
+| Field    | Type         | Null | Key | Default | Extra          |
++----------+--------------+------+-----+---------+----------------+
+| user_id  | int          | NO   | PRI | NULL    | auto_increment |
+| name     | varchar(100) | NO   |     | NULL    |                |
+| email    | varchar(100) | NO   | UNI | NULL    |                |
+| password | varchar(100) | NO   |     | NULL    |                |
++----------+--------------+------+-----+---------+----------------+
+4 rows in set (0.09 sec)
+
+mysql> create table categories(category_id int auto_increment primary key,category_name varchar(100) not null,type enum("income","expense") not null);
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> create table transactions(transaction_id int auto_increment primary key,user_id int,category_id int,foreign key(user_id) references users(user_id),foreign key(category_id) references categories(category_id),amount decimal(10,2) not null,date date not null,payment_method enum("cash","card","upi","other") default "cash",note varchar(100));
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> desc transactions;
++----------------+-----------------------------------+------+-----+---------+----------------+
+| Field          | Type                              | Null | Key | Default | Extra          |
++----------------+-----------------------------------+------+-----+---------+----------------+
+| transaction_id | int                               | NO   | PRI | NULL    | auto_increment |
+| user_id        | int                               | YES  | MUL | NULL    |                |
+| category_id    | int                               | YES  | MUL | NULL    |                |
+| amount         | decimal(10,2)                     | NO   |     | NULL    |                |
+| date           | date                              | NO   |     | NULL    |                |
+| payment_method | enum('cash','card','upi','other') | YES  |     | cash    |                |
+| note           | varchar(100)                      | YES  |     | NULL    |                |
++----------------+-----------------------------------+------+-----+---------+----------------+
+7 rows in set (0.00 sec)
+
+mysql> create table budgets(budget_id int auto_increment primary key,user_id int,category_id int,foreign key(user_id) references users(user_id),foreign key(category_id) references categories(category_id),amount_limit decimal(10,2) not null,month int not null,year int not null);
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> insert into users(name,email,password) values("rafiya","rafiya@gmail.com","rafiya@123"),("rushda","rushda@gmail.com","rushda@123"),("faris","faris@gmail.com","faris@123");
+Query OK, 3 rows affected (0.07 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select *from users;
++---------+--------+------------------+------------+
+| user_id | name   | email            | password   |
++---------+--------+------------------+------------+
+|       1 | rafiya | rafiya@gmail.com | rafiya@123 |
+|       2 | rushda | rushda@gmail.com | rushda@123 |
+|       3 | faris  | faris@gmail.com  | faris@123  |
++---------+--------+------------------+------------+
+3 rows in set (0.02 sec)
+
+mysql> insert into users(name,email,password) values("ankita","ankita@gmail.com","ankita@123"),("rani","rani@gmail.com","rani@123"),("sam","sam@gmail.com","sam@123");
+Query OK, 3 rows affected (0.02 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select *from users;
++---------+--------+------------------+------------+
+| user_id | name   | email            | password   |
++---------+--------+------------------+------------+
+|       1 | rafiya | rafiya@gmail.com | rafiya@123 |
+|       2 | rushda | rushda@gmail.com | rushda@123 |
+|       3 | faris  | faris@gmail.com  | faris@123  |
+|       4 | ankita | ankita@gmail.com | ankita@123 |
+|       5 | rani   | rani@gmail.com   | rani@123   |
+|       6 | sam    | sam@gmail.com    | sam@123    |
++---------+--------+------------------+------------+
+6 rows in set (0.00 sec)
+
+mysql> insert into categories(category_name,type) values("salary","income"),("bills","expense"),("rent","expense"),("freelance","income"),("food","expense"),("shopping","expense");
+Query OK, 6 rows affected (0.00 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> select *from categories;
++-------------+---------------+---------+
+| category_id | category_name | type    |
++-------------+---------------+---------+
+|           1 | salary        | income  |
+|           2 | bills         | expense |
+|           3 | rent          | expense |
+|           4 | freelance     | income  |
+|           5 | food          | expense |
+|           6 | shopping      | expense |
++-------------+---------------+---------+
+6 rows in set (0.00 sec)
+
+mysql> insert into transactions(user_id,category_id,amount,date,payment_method,note) values(1, 1, 30000, '2025-09-01', 'upi', 'monthly salary');
+Query OK, 1 row affected (0.02 sec)
+
+mysql> insert into transactions(user_id,category_id,amount,date,payment_method,note) values(1, 5, 1200, '2025-09-03', 'cash', 'lunch with friends');
+Query OK, 1 row affected (0.02 sec)
+
+mysql> insert into transactions(user_id,category_id,amount,date,payment_method,note) values(1, 2, 2000, '2025-09-07', 'upi', 'electricity bill');
+Query OK, 1 row affected (0.02 sec)
+
+mysql> insert into transactions(user_id,category_id,amount,date,payment_method,note) values(2, 4, 8000, '2025-09-02', 'upi', 'freelance project');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into transactions(user_id,category_id,amount,date,payment_method,note) values(2, 6, 1500, '2025-09-15', 'card', 'clothes shopping');
+Query OK, 1 row affected (0.02 sec)
+
+mysql> select *from transactions;
++----------------+---------+-------------+----------+------------+----------------+--------------------+
+| transaction_id | user_id | category_id | amount   | date       | payment_method | note               |
++----------------+---------+-------------+----------+------------+----------------+--------------------+
+|              1 |       1 |           1 | 30000.00 | 2025-09-01 | upi            | monthly salary     |
+|              2 |       1 |           5 |  1200.00 | 2025-09-03 | cash           | lunch with friends |
+|              3 |       1 |           2 |  2000.00 | 2025-09-07 | upi            | electricity bill   |
+|              4 |       2 |           4 |  8000.00 | 2025-09-02 | upi            | freelance project  |
+|              5 |       2 |           6 |  1500.00 | 2025-09-15 | card           | clothes shopping   |
++----------------+---------+-------------+----------+------------+----------------+--------------------+
+5 rows in set (0.00 sec)
+
+mysql> insert into budgets(user_id,category_id,amount_limit,month,year) values(1,3,5000,9,2025);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> insert into budgets(user_id,category_id,amount_limit,month,year) values(1,5,6000,9,2025);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> insert into budgets(user_id,category_id,amount_limit,month,year) values(2,6,2000,9,2025);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select *from budgets;
++-----------+---------+-------------+--------------+-------+------+
+| budget_id | user_id | category_id | amount_limit | month | year |
++-----------+---------+-------------+--------------+-------+------+
+|         1 |       1 |           3 |      5000.00 |     9 | 2025 |
+|         2 |       1 |           5 |      6000.00 |     9 | 2025 |
+|         3 |       2 |           6 |      2000.00 |     9 | 2025 |
++-----------+---------+-------------+--------------+-------+------+
+3 rows in set (0.00 sec)
+
+mysql> select sum(t.amount) as total_expense from transactions t join categories c on c.category_id=t.category_id where t.user_id=1 and t.date=9 and t.date=2025;
++---------------+
+| total_expense |
++---------------+
+|          NULL |
++---------------+
+1 row in set, 2 warnings (0.04 sec)
+
+mysql> select sum(t.amount) as total_expense from transactions t join categories c on c.category_id=t.category_id where t.user_id=1 and c.type='expense' and month(t.date)=9 and year(t.date)=2025;
++---------------+
+| total_expense |
++---------------+
+|       3200.00 |
++---------------+
+1 row in set (0.00 sec)
+
+mysql> select c.category_name,sum(t.amount) as total_spent from transactions t join categories c on c.category_id=t.category_id where t.user_id=1 and c.type='expense' group by c.category_name order by total_spent desc limit 1;
++---------------+-------------+
+| category_name | total_spent |
++---------------+-------------+
+| bills         |     2000.00 |
++---------------+-------------+
+1 row in set (0.02 sec)
+
+mysql> select c.type,sum(t.amount) as total from transactions t join categories c on c.category_id=t.category_id where t.user_id=1 and c.type='expense' group by c.type;
++---------+---------+
+| type    | total   |
++---------+---------+
+| expense | 3200.00 |
++---------+---------+
+1 row in set (0.00 sec)
+
+mysql>
