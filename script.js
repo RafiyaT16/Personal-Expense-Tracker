@@ -1,7 +1,6 @@
 const form = document.getElementById("expense-form");
 const tableBody = document.getElementById("expense-table");
 
-// Load expenses when page loads
 window.onload = loadExpenses;
 
 // Add expense
