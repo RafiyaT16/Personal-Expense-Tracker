@@ -5,21 +5,20 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-# ✅ Connect to MySQL Database
+# Connect to MySQL Database
 def get_db_connection():
     return mysql.connector.connect(
         host="localhost",
         user="root",
-        password="root123",  # 🔑 replace with your MySQL root password
+        password="root123",  
         database="sqlpro"
     )
 
-# ===================== HOME =====================
+
 @app.route("/")
 def index():
     return render_template("index.html")
 
-# ===================== USERS =====================
 @app.route("/users", methods=["GET"])
 def get_users():
     conn = get_db_connection()
@@ -29,7 +28,6 @@ def get_users():
     conn.close()
     return jsonify(users)
 
-# ===================== CATEGORIES =====================
 @app.route("/categories", methods=["GET"])
 def get_categories():
     conn = get_db_connection()
@@ -39,7 +37,6 @@ def get_categories():
     conn.close()
     return jsonify(categories)
 
-# ===================== TRANSACTIONS =====================
 @app.route("/transactions", methods=["GET"])
 def get_transactions():
     user_id = request.args.get("user_id", type=int)
@@ -89,7 +86,6 @@ def add_transaction():
     conn.close()
     return jsonify({"message": "Transaction added successfully!"})
 
-# ===================== BUDGETS =====================
 @app.route("/budgets", methods=["GET"])
 def get_budgets():
     user_id = request.args.get("user_id", type=int)
@@ -134,7 +130,6 @@ def add_budget():
     conn.close()
     return jsonify({"message": "Budget added successfully!"})
 
-# ===================== ANALYTICS =====================
 @app.route("/analytics/expense_summary", methods=["GET"])
 def expense_summary():
     user_id = request.args.get("user_id", type=int)
@@ -155,6 +150,5 @@ def expense_summary():
     conn.close()
     return jsonify(summary)
 
-# ===================== RUN =====================
 if __name__ == "__main__":
     app.run(debug=True)
