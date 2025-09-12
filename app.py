@@ -5,7 +5,6 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-# Connect to MySQL Database
 def get_db_connection():
     return mysql.connector.connect(
         host="localhost",
@@ -13,7 +12,6 @@ def get_db_connection():
         password="root123",  
         database="sqlpro"
     )
-
 
 @app.route("/")
 def index():
@@ -110,6 +108,39 @@ def get_budgets():
     budgets = cursor.fetchall()
     conn.close()
     return jsonify(budgets)
+
+@app.route("/add", methods=["POST"])
+def add_expense_simple():
+    data = request.get_json()
+    category = data["category"]
+    amount = data["amount"]
+    date = data["date"]
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+        INSERT INTO transactions (user_id, category_id, amount, date, payment_method, note)
+        VALUES (%s, %s, %s, %s, %s, %s)
+    """, (1, 1, amount, date, "cash", category))
+    conn.commit()
+    conn.close()
+    return jsonify({"message": "Expense added successfully!"})
+
+@app.route("/expenses", methods=["GET"])
+def get_expenses_simple():
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("""
+        SELECT c.category_name AS category, t.amount, t.date
+        FROM transactions t
+        JOIN categories c ON t.category_id = c.category_id
+        WHERE t.user_id = %s
+        ORDER BY t.date DESC
+    """, (1,))
+    expenses = cursor.fetchall()
+    conn.close()
+    return jsonify(expenses)
+
 
 @app.route("/budgets", methods=["POST"])
 def add_budget():
