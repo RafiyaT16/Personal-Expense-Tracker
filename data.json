@@ -1,0 +1,17 @@
+[
+  {
+    "category": "salary",
+    "amount": "30000",
+    "date": "2025-10-06"
+  },
+  {
+    "category": "food",
+    "amount": "6000",
+    "date": "2025-10-08"
+  },
+  {
+    "category": "shopping",
+    "amount": "4000",
+    "date": "2025-10-16"
+  }
+]
