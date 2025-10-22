@@ -9,3 +9,11 @@ Features:
 3. Clear all expenses.
 4. Expenses are saved MySQL database.
 5. Frontend is responsive and simple.
+
+It has expenses table which consists of -
+expenses (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    category VARCHAR(255),
+    amount DECIMAL(10,2),
+    date DATE
+)
