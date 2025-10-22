@@ -3,8 +3,9 @@ Sql project for tracking personal expense of a user, which can be used to find t
 
 Goal: To help users track income and expenses, analyze spending habits, and generate monthly/yearly financial summaries.
 
-Tables-
-1. Users(user_id (PK), name, email, password)
-2. Categories(category_id (PK), category_name (e.g. Food, Travel, Bills, Entertainment), type (Income / Expense))
-3. Transactions(transaction_id (PK), user_id (FK), category_id (FK), amount, date, payment_method (Cash, Card, UPI, etc.), note)
-4. Budgets(budget_id (PK), user_id (FK), category_id (FK), amount_limit, month, year)
+Features:
+1. Add daily expenses with category, amount, and date.
+2. View all expenses.
+3. Clear all expenses.
+4. Expenses are saved MySQL database.
+5. Frontend is responsive and simple.
